@@ -225,13 +225,22 @@ function AutoAllocationContent() {
 }
 
 function ExternalProfileContent({ app }: { app: PortfolioApp }) {
+  const urlLabel = app.id === 'linkedin' ? 'LinkedIn URL' : 'GitHub URL';
+  const helperText =
+    app.id === 'linkedin'
+      ? 'View the latest version of my profile and connect with me on LinkedIn.'
+      : 'Visit my GitHub profile to review repositories, code samples, and open-source work.';
+
   return (
     <section className="space-y-4">
       <h1 className="text-2xl font-bold">{app.title}</h1>
-      <p className="text-sm leading-6">
-        Add your real {app.title} URL in <code className="rounded bg-white px-1">src/data/portfolio.ts</code>. This
-        window is structured as an in-portfolio profile card, while the button can point to the external profile.
-      </p>
+      <p className="text-sm leading-6">{helperText}</p>
+      <div className="rounded border border-[#b9b29e] bg-white/75 p-3 text-sm shadow-panel">
+        <p className="font-bold">{urlLabel}</p>
+        <a href={app.externalUrl} target="_blank" rel="noreferrer" className="break-all text-[#143c9f] underline">
+          {app.externalUrl}
+        </a>
+      </div>
       <a
         href={app.externalUrl}
         target="_blank"
@@ -251,11 +260,28 @@ function ContactContent() {
       <div className="rounded border border-[#b9b29e] bg-white/75 p-3 text-sm shadow-panel">
         <p className="font-bold">{profile.name}</p>
         <p>{profile.location}</p>
-        <p>{profile.email}</p>
+        <p>
+          <a href={`mailto:${profile.email}`} className="text-[#143c9f] underline">
+            {profile.email}
+          </a>
+        </p>
+        <p>
+          <a href="https://github.com/themachinecl" target="_blank" rel="noreferrer" className="text-[#143c9f] underline">
+            https://github.com/themachinecl
+          </a>
+        </p>
+        <p>
+          <a
+            href="https://www.linkedin.com/in/juanpaulorf/"
+            target="_blank"
+            rel="noreferrer"
+            className="text-[#143c9f] underline"
+          >
+            https://www.linkedin.com/in/juanpaulorf/
+          </a>
+        </p>
       </div>
-      <p className="text-sm leading-6">
-        Replace the placeholder email with a real contact method or connect this panel to a form endpoint later.
-      </p>
+      <p className="text-sm leading-6">You can reach me by email or open the linked GitHub and LinkedIn profiles above.</p>
     </section>
   );
 }
