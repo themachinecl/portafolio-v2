@@ -18,8 +18,7 @@ export default function DesktopIcon({ app, onOpen, compact = false }: DesktopIco
           ? 'w-full border border-white/15 bg-slate-950/35 shadow-panel backdrop-blur'
           : 'w-[92px] flex-col justify-start text-center hover:bg-white/15 focus:bg-white/20',
       ].join(' ')}
-      onDoubleClick={() => onOpen(app.id)}
-      onClick={() => compact && onOpen(app.id)}
+      onClick={() => onOpen(app.id)}
       aria-label={`Open ${app.title}`}
     >
       <span
