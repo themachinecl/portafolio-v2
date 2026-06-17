@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --chrome: #d8d5c8;
+  --chrome-light: #efeee7;
+  --ink: #111827;
+  --xp-blue: #1b55d9;
+  --xp-blue-dark: #143c9f;
+  --xp-green: #2f8a27;
+  --taskbar: #2044ad;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: #0f172a;
+  font-family: Tahoma, Verdana, Segoe UI, sans-serif;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.pixel-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, .12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, .12) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+.win-bevel {
+  border: 1px solid #172554;
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, .95),
+    inset -1px -1px 0 rgba(0, 0, 0, .42),
+    0 20px 60px rgba(0, 0, 0, .32);
+}
+
+.retro-scrollbar {
+  scrollbar-color: #9aa6bf #e9e5d8;
+  scrollbar-width: thin;
+}
+
+.retro-scrollbar::-webkit-scrollbar {
+  width: 12px;
+}
+
+.retro-scrollbar::-webkit-scrollbar-track {
+  background: #e9e5d8;
+}
+
+.retro-scrollbar::-webkit-scrollbar-thumb {
+  background: #9aa6bf;
+  border: 2px solid #e9e5d8;
+}
