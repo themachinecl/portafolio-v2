@@ -38,6 +38,7 @@ export default function Window({
   children,
 }: WindowProps) {
   const frameRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
   const pointerRef = useRef({
     mode: 'move' as DragMode,
     pointerId: 0,
@@ -49,6 +50,13 @@ export default function Window({
     startHeight: 0,
   });
   const [isDragging, setIsDragging] = useState(false);
+
+  useEffect(() => {
+    const syncMobile = () => setIsMobile(window.innerWidth < 720);
+    syncMobile();
+    window.addEventListener('resize', syncMobile);
+    return () => window.removeEventListener('resize', syncMobile);
+  }, []);
 
   useEffect(() => {
     const handlePointerMove = (event: PointerEvent) => {
@@ -86,6 +94,7 @@ export default function Window({
   if (state.minimized) return null;
 
   const beginPointer = (event: React.PointerEvent, mode: DragMode) => {
+    if (isMobile) return;
     if (event.button !== 0) return;
     onFocus(state.id);
     pointerRef.current = {
@@ -107,13 +116,14 @@ export default function Window({
       ref={frameRef}
       className={[
         'portfolio-window win-bevel fixed flex flex-col overflow-hidden rounded-[6px] bg-[#d9d6c9]',
+        isMobile ? 'mobile-window' : '',
         active ? 'ring-2 ring-white/35' : 'brightness-[.94]',
       ].join(' ')}
       style={{
-        left: state.x,
-        top: state.y,
-        width: state.width,
-        height: state.height,
+        left: isMobile ? 0 : state.x,
+        top: isMobile ? 0 : state.y,
+        width: isMobile ? '100vw' : state.width,
+        height: isMobile ? 'calc(100vh - 44px)' : state.height,
         zIndex: state.zIndex,
       }}
       onMouseDown={() => onFocus(state.id)}
@@ -121,7 +131,10 @@ export default function Window({
       aria-label={title}
     >
       <div
-        className="flex h-8 shrink-0 cursor-move select-none items-center justify-between border-b border-[#102c74] bg-gradient-to-r from-[#123799] via-[#235bd7] to-[#74a4ff] pl-2 text-white"
+        className={[
+          'flex h-8 shrink-0 select-none items-center justify-between border-b border-[#102c74] bg-gradient-to-r from-[#123799] via-[#235bd7] to-[#74a4ff] pl-2 text-white',
+          isMobile ? 'cursor-default' : 'cursor-move',
+        ].join(' ')}
         onPointerDown={(event) => beginPointer(event, 'move')}
       >
         <div className="flex min-w-0 items-center gap-2">
@@ -169,7 +182,7 @@ export default function Window({
         {children}
       </div>
       <div
-        className="absolute bottom-0 right-0 h-5 w-5 cursor-se-resize"
+        className={['absolute bottom-0 right-0 h-5 w-5 cursor-se-resize', isMobile ? 'hidden' : ''].join(' ')}
         onPointerDown={(event) => beginPointer(event, 'resize')}
         aria-hidden="true"
       >

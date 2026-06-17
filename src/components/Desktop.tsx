@@ -1,10 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import gsap from 'gsap';
-import { apps, profile, type AppId } from '@/data/portfolio';
+import { apps, desktopAppIds, profile, startMenuAppIds, type AppId } from '@/data/portfolio';
 import BootScreen from './BootScreen';
 import DesktopIcon from './DesktopIcon';
 import Taskbar from './Taskbar';
-import ThreeBackground from './ThreeBackground';
 import WindowManager from './WindowManager';
 import type { WindowState } from './Window';
 
@@ -13,22 +12,31 @@ export default function Desktop() {
   const [startOpen, setStartOpen] = useState(false);
   const [windows, setWindows] = useState<WindowState[]>([]);
   const [activeWindow, setActiveWindow] = useState<AppId | undefined>();
-  const zRef = useRef(50);
+  const bootTimelineRef = useRef<gsap.core.Timeline | null>(null);
 
   const openWindowIds = useMemo(() => windows.map((windowItem) => windowItem.id), [windows]);
+  const desktopApps = useMemo(() => apps.filter((app) => desktopAppIds.includes(app.id)), []);
+  const startMenuApps = useMemo(() => apps.filter((app) => startMenuAppIds.includes(app.id)), []);
 
   useEffect(() => {
-    const timeline = gsap.timeline();
-    timeline
-      .to('.boot-progress', { x: 190, duration: 0.9, ease: 'steps(5)' })
-      .to('.boot-screen', { opacity: 0, duration: 0.42, delay: 0.15 })
-      .call(() => setBooting(false))
-      .fromTo(
+    const finishBoot = () => {
+      setBooting(false);
+      gsap.fromTo(
         '.desktop-icon',
         { y: 10, opacity: 0, scale: 0.96 },
-        { y: 0, opacity: 1, scale: 1, stagger: 0.055, duration: 0.32, ease: 'back.out(1.6)' },
-      )
-      .fromTo('.taskbar-hint', { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.25 }, '<');
+        { y: 0, opacity: 1, scale: 1, stagger: 0.05, duration: 0.32, ease: 'back.out(1.6)' },
+      );
+      gsap.fromTo('.taskbar-shell', { y: 44 }, { y: 0, duration: 0.34, ease: 'power2.out' });
+      gsap.fromTo('.taskbar-hint', { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.25, delay: 0.08 });
+    };
+
+    const timeline = gsap.timeline({ onComplete: finishBoot });
+    bootTimelineRef.current = timeline;
+    timeline
+      .to('.boot-line', { opacity: 1, y: 0, stagger: 0.22, duration: 0.24, ease: 'power2.out' })
+      .fromTo('.boot-ok', { scale: 0.7 }, { scale: 1, stagger: 0.22, duration: 0.2, ease: 'back.out(2)' }, '<')
+      .to('.boot-welcome', { opacity: 1, y: -2, duration: 0.28, ease: 'power2.out' })
+      .to('.boot-screen', { opacity: 0, duration: 0.42, delay: 0.25 });
 
     return () => {
       timeline.kill();
@@ -37,23 +45,23 @@ export default function Desktop() {
 
   const openApp = useCallback((id: AppId) => {
     setStartOpen(false);
-    zRef.current += 1;
     const app = apps.find((item) => item.id === id);
     if (!app) return;
 
     setWindows((current) => {
+      const nextZ = Math.max(50, ...current.map((windowItem) => windowItem.zIndex)) + 1;
       const existing = current.find((windowItem) => windowItem.id === id);
       if (existing) {
         return current.map((windowItem) =>
-          windowItem.id === id ? { ...windowItem, minimized: false, zIndex: zRef.current } : windowItem,
+          windowItem.id === id ? { ...windowItem, minimized: false, zIndex: nextZ } : windowItem,
         );
       }
 
       const mobile = window.innerWidth < 720;
-      const width = mobile ? Math.max(320, window.innerWidth - 18) : app.defaultSize.width;
-      const height = mobile ? Math.max(360, window.innerHeight - 74) : app.defaultSize.height;
-      const x = mobile ? 9 : Math.min(app.defaultPosition.x, window.innerWidth - width - 10);
-      const y = mobile ? 10 : Math.min(app.defaultPosition.y, window.innerHeight - height - 54);
+      const width = mobile ? window.innerWidth : app.defaultSize.width;
+      const height = mobile ? window.innerHeight - 44 : app.defaultSize.height;
+      const x = mobile ? 0 : Math.min(app.defaultPosition.x, window.innerWidth - width - 10);
+      const y = mobile ? 0 : Math.min(app.defaultPosition.y, window.innerHeight - height - 54);
 
       return [
         ...current,
@@ -63,7 +71,7 @@ export default function Desktop() {
           y: Math.max(8, y),
           width,
           height,
-          zIndex: zRef.current,
+          zIndex: nextZ,
           minimized: false,
         },
       ];
@@ -80,40 +88,93 @@ export default function Desktop() {
   }, []);
 
   const focusWindow = useCallback((id: AppId) => {
-    zRef.current += 1;
     setActiveWindow(id);
-    setWindows((current) =>
-      current.map((windowItem) =>
-        windowItem.id === id ? { ...windowItem, minimized: false, zIndex: zRef.current } : windowItem,
-      ),
-    );
+    setWindows((current) => {
+      const nextZ = Math.max(50, ...current.map((windowItem) => windowItem.zIndex)) + 1;
+      return current.map((windowItem) =>
+        windowItem.id === id ? { ...windowItem, minimized: false, zIndex: nextZ } : windowItem,
+      );
+    });
+  }, []);
+
+  const skipBoot = useCallback(() => {
+    bootTimelineRef.current?.kill();
+    gsap.to('.boot-screen', {
+      opacity: 0,
+      duration: 0.2,
+      onComplete: () => {
+        setBooting(false);
+        gsap.fromTo('.desktop-icon', { opacity: 0, y: 8 }, { opacity: 1, y: 0, stagger: 0.035, duration: 0.22 });
+        gsap.fromTo('.taskbar-shell', { y: 44 }, { y: 0, duration: 0.24, ease: 'power2.out' });
+      },
+    });
   }, []);
 
   return (
-    <main className="relative h-screen w-screen overflow-hidden bg-[#104b9b] text-slate-950">
-      <ThreeBackground />
-      <div className="absolute inset-0 z-[1] bg-[radial-gradient(circle_at_22%_18%,rgba(129,216,245,.95),transparent_26%),radial-gradient(circle_at_72%_10%,rgba(255,247,200,.65),transparent_22%),linear-gradient(135deg,#184bb0_0%,#1793bb_43%,#6bc56b_76%,#2c7a32_100%)]" />
-      <div className="pixel-grid absolute inset-0 z-[2] opacity-25" />
-      <div className="absolute inset-x-0 bottom-11 z-[3] h-[22vh] bg-gradient-to-t from-[#247735] via-[#52a94a] to-transparent opacity-80" />
+    <main className="relative h-screen w-screen overflow-hidden bg-[#10214f] text-slate-950">
+      <div className="classic-wallpaper absolute inset-0 z-[1]">
+        <div className="classic-square classic-square-back" />
+        <div className="classic-square classic-square-middle" />
+        <div className="classic-square classic-square-front" />
+        <div className="classic-bar classic-bar-top" />
+        <div className="classic-bar classic-bar-left" />
+        <div className="classic-logo" aria-hidden="true">
+          <span className="classic-logo-panel classic-logo-panel-red" />
+          <span className="classic-logo-panel classic-logo-panel-blue" />
+          <span className="classic-logo-panel classic-logo-panel-green" />
+          <span className="classic-logo-panel classic-logo-panel-yellow" />
+        </div>
+      </div>
 
       <section className="relative z-10 hidden h-[calc(100vh-44px)] p-4 sm:block" aria-label="Desktop icons">
-        <div className="grid w-[116px] grid-cols-1 gap-3">
-          {apps.map((app) => (
-            <DesktopIcon key={app.id} app={app} onOpen={openApp} />
-          ))}
+        <div className="grid h-full grid-cols-[minmax(290px,360px)_1fr] gap-4 xl:grid-cols-[minmax(330px,420px)_1fr]">
+          <div className="rounded border border-white/25 bg-slate-950/30 p-4 text-white shadow-panel backdrop-blur-sm">
+            <p className="text-xs font-bold uppercase tracking-[.24em] text-[#f7d154]">Home</p>
+            <h1 className="mt-1 text-2xl font-bold">{profile.name}</h1>
+            <div className="mt-2 space-y-1 text-sm font-semibold">
+              {profile.roleLines.map((line) => (
+                <p key={line}>{line}</p>
+              ))}
+            </div>
+            <p className="mt-2 text-sm leading-6 text-white/90">{profile.summary}</p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {profile.quickStats.map((stat) => (
+                <span key={stat} className="rounded border border-white/20 bg-white/10 px-2 py-1 text-[11px] font-bold uppercase tracking-wide">
+                  {stat}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className="grid content-start gap-2 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+            {desktopApps.map((app) => (
+              <DesktopIcon key={app.id} app={app} onOpen={openApp} dense />
+            ))}
+          </div>
         </div>
         <div className="taskbar-hint absolute bottom-5 left-5 max-w-[380px] rounded border border-white/25 bg-slate-950/30 px-3 py-2 text-xs font-semibold text-white shadow-panel backdrop-blur-sm">
-          Double-click icons to open portfolio windows. Drag title bars and resize from the lower-right corner.
+          Juan Paulo OS - Enterprise Edition. Click icons to explore the system.
         </div>
       </section>
 
       <section className="relative z-10 h-[calc(100vh-44px)] overflow-auto p-4 pb-6 sm:hidden" aria-label="App launcher">
         <div className="mb-4 rounded border border-white/20 bg-slate-950/35 p-3 text-white shadow-panel backdrop-blur">
           <h1 className="text-xl font-bold">{profile.osName}</h1>
-          <p className="mt-1 text-sm">{profile.role}</p>
+          <div className="mt-2 space-y-1 text-sm font-semibold">
+            {profile.roleLines.map((line) => (
+              <p key={line}>{line}</p>
+            ))}
+          </div>
+          <p className="mt-2 text-sm">{profile.summary}</p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {profile.quickStats.map((stat) => (
+              <span key={stat} className="rounded border border-white/20 bg-white/10 px-2 py-1 text-[11px] font-bold uppercase tracking-wide">
+                {stat}
+              </span>
+            ))}
+          </div>
         </div>
         <div className="grid gap-2">
-          {apps.map((app) => (
+          {desktopApps.map((app) => (
             <DesktopIcon key={app.id} app={app} onOpen={openApp} compact />
           ))}
         </div>
@@ -125,10 +186,12 @@ export default function Desktop() {
         setWindows={setWindows}
         activeWindow={activeWindow}
         setActiveWindow={setActiveWindow}
+        onOpenApp={openApp}
       />
 
       <Taskbar
         apps={apps}
+        menuApps={startMenuApps}
         openWindows={openWindowIds}
         activeWindow={activeWindow}
         startOpen={startOpen}
@@ -137,7 +200,7 @@ export default function Desktop() {
         onFocusWindow={focusWindow}
       />
 
-      <BootScreen visible={booting} />
+      <BootScreen visible={booting} onSkip={skipBoot} />
     </main>
   );
 }
