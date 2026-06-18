@@ -2,6 +2,7 @@ import {
     Award,
     BadgeInfo,
     BriefcaseBusiness,
+    Castle,
     Cpu,
     Database,
     FolderGit2,
@@ -29,6 +30,7 @@ export type AppId =
     | 'itauInsurance'
     | 'bancoChileEnterprise'
     | 'clinicaAlemanaDigital'
+    | 'portfolioAoe2'
     | 'education'
     | 'languages'
     | 'github'
@@ -251,6 +253,15 @@ export const apps: PortfolioApp[] = [
         defaultSize: { width: 720, height: 500 },
         defaultPosition: { x: 340, y: 220 },
     },
+    {
+        id: 'portfolioAoe2',
+        title: 'Portfolio AOE2',
+        icon: Castle,
+        accent: '#d4a24c',
+        externalUrl: 'https://portafolio-v1-rfng.vercel.app/',
+        defaultSize: { width: 620, height: 430 },
+        defaultPosition: { x: 360, y: 240 },
+    },
 ];
 
 export const desktopAppIds: AppId[] = [
@@ -263,6 +274,7 @@ export const desktopAppIds: AppId[] = [
     'languages',
     'github',
     'linkedin',
+    'portfolioAoe2',
     'contact',
     'recycleBin',
     'aboutSystem',
@@ -404,6 +416,12 @@ export const projectCards: ProjectCard[] = [
         category: 'Healthcare digital products',
         summary: 'Enterprise healthcare solutions delivered inside a multi-team environment.',
     },
+    {
+        id: 'portfolioAoe2',
+        title: 'Portfolio AOE2',
+        category: 'Interactive portfolio experiment',
+        summary: 'A previous portfolio version with an Age of Empires II-inspired presentation style.',
+    },
 ];
 
 export const projectDetails: Record<ProjectCard['id'], ProjectDetail> = {
@@ -456,5 +474,13 @@ export const projectDetails: Record<ProjectCard['id'], ProjectDetail> = {
         responsibilities: ['Healthcare product delivery', 'Enterprise frontend architecture', 'Cloud-supported workflows'],
         technologies: ['Angular', 'React', 'GraphQL', 'NestJS', 'AWS', 'Azure'],
         widgets: ['Patient flow', 'Appointments', 'Clinical service status', 'Team board'],
+    },
+    portfolioAoe2: {
+        role: 'Personal Project',
+        period: 'Portfolio v1',
+        summary: 'Age of Empires II-inspired portfolio experience published as a previous version.',
+        responsibilities: ['Interactive UI concept', 'Portfolio storytelling', 'Frontend implementation'],
+        technologies: ['Frontend', 'UI Design', 'GitHub'],
+        widgets: ['Repository redirect', 'Creative presentation', 'Portfolio archive'],
     },
 };

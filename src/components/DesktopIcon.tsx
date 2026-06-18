@@ -9,6 +9,7 @@ type DesktopIconProps = {
 
 export default function DesktopIcon({ app, onOpen, compact = false, dense = false }: DesktopIconProps) {
   const Icon = app.icon;
+  const isAoe = app.id === 'portfolioAoe2';
 
   return (
     <button
@@ -26,15 +27,21 @@ export default function DesktopIcon({ app, onOpen, compact = false, dense = fals
     >
       <span
         className={[
-          'flex shrink-0 items-center justify-center rounded border border-white/50 shadow-panel',
+          'relative flex shrink-0 items-center justify-center rounded border border-white/50 shadow-panel',
           compact ? 'h-11 w-11' : dense ? 'h-9 w-9' : 'h-11 w-11',
         ].join(' ')}
         style={{
-          background: `linear-gradient(135deg, ${app.accent}, #fff7c8)`,
-          color: '#172554',
+          background: isAoe
+            ? 'linear-gradient(135deg, #5b3517, #d4a24c 58%, #fff0b8)'
+            : `linear-gradient(135deg, ${app.accent}, #fff7c8)`,
+          color: isAoe ? '#fff7d6' : '#172554',
         }}
       >
-        <Icon size={compact ? 23 : dense ? 19 : 25} strokeWidth={2.2} />
+        {isAoe ? (
+          <img src="/image/aoe2.png" alt="" className="h-full w-full rounded object-cover" aria-hidden="true" />
+        ) : (
+          <Icon size={compact ? 23 : dense ? 19 : 25} strokeWidth={2.2} />
+        )}
       </span>
       <span className={['font-semibold leading-tight [text-shadow:1px_1px_0_rgba(0,0,0,.65)]', compact ? 'text-[12px]' : dense ? 'text-[11px]' : 'text-[12px]'].join(' ')}>
         {app.title}

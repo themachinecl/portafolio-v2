@@ -48,6 +48,11 @@ export default function Desktop() {
     const app = apps.find((item) => item.id === id);
     if (!app) return;
 
+    if (id === 'portfolioAoe2' && app.externalUrl) {
+      window.open(app.externalUrl, '_blank', 'noopener,noreferrer');
+      return;
+    }
+
     setWindows((current) => {
       const nextZ = Math.max(50, ...current.map((windowItem) => windowItem.zIndex)) + 1;
       const existing = current.find((windowItem) => windowItem.id === id);

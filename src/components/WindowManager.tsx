@@ -133,6 +133,7 @@ function WindowContent({ app, onOpenApp }: { app: PortfolioApp; onOpenApp: (id: 
     case 'itauInsurance':
     case 'bancoChileEnterprise':
     case 'clinicaAlemanaDigital':
+    case 'portfolioAoe2':
       return <ProjectDetailContent app={app} />;
     case 'recycleBin':
       return <RecycleBinContent />;
