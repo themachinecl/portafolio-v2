@@ -147,11 +147,11 @@ export const apps: PortfolioApp[] = [
     },
     {
         id: 'autoAllocation',
-        title: 'Auto Allocation Japan',
+        title: 'AutoAllocationJapan.app',
         icon: MonitorCog,
         accent: '#f3a4ff',
-        defaultSize: { width: 780, height: 560 },
-        defaultPosition: { x: 190, y: 98 },
+        defaultSize: { width: 980, height: 650 },
+        defaultPosition: { x: 130, y: 70 },
     },
     {
         id: 'education',
@@ -413,7 +413,7 @@ export const projectDetails: Record<ProjectCard['id'], ProjectDetail> = {
         summary:
             'Flagship logistics platform for allocation, reservation handling, and operational visibility in Japan.',
         responsibilities: ['Angular migration', 'Microfrontends', 'NestJS APIs', 'Reservation system', 'Data Science integration'],
-        technologies: ['Angular', 'TypeScript', 'NestJS', 'SQL Server', 'Azure', 'Docker', 'Kubernetes'],
+        technologies: ['Angular', 'TypeScript', 'NestJS', 'SQL Server', 'Azure', 'Docker', 'Kubernetes', 'Module Federation'],
         widgets: ['Reservation queue', 'Allocation status', 'Migration progress', 'API health', 'Operational sync'],
     },
     recurringDecisions: {

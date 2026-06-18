@@ -199,6 +199,21 @@ a {
   box-shadow: 0 0 10px currentColor;
 }
 
+.auto-allocation-app {
+  --aaj-blue: #0a4c9a;
+  --aaj-orange: #f06f1a;
+}
+
+.screenshot-photo {
+  transform-origin: center;
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.screenshot-photo-zoomed {
+  transform: scale(1.35);
+  box-shadow: 0 16px 50px rgba(15, 23, 42, .25);
+}
+
 @keyframes menu-pop {
   from {
     opacity: 0;
