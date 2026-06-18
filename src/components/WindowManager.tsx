@@ -614,52 +614,10 @@ function AutoGallery() {
   const [index, setIndex] = useState(0);
   const [zoomed, setZoomed] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
-  const screenshots = [
-    {
-      src: '/image/1.png',
-      title: 'Login Experience',
-      context: 'Secure access point for the enterprise recurring decisions and logistics platform.',
-      contribution:
-        'Developed Angular features, integrated APIs, collaborated with Data Science teams and implemented reservation workflows.',
-      technologies: ['Angular', 'NestJS', 'SQL Server', 'Azure'],
-    },
-    {
-      src: '/image/2.png',
-      title: 'Recurring Decisions Dashboard',
-      context: 'Enterprise dashboard used to manage recurring decisions and operational modules.',
-      contribution:
-        'Developed Angular features, integrated APIs, collaborated with Data Science teams and implemented reservation workflows.',
-      technologies: ['Angular', 'TypeScript', 'NestJS'],
-    },
-    {
-      src: '/image/3.png',
-      title: 'Auto Allocation Japan Orders',
-      context: 'Enterprise logistics platform used to manage allocation workflows and reservations.',
-      contribution:
-        'Developed Angular features, integrated APIs, collaborated with Data Science teams and implemented reservation workflows.',
-      technologies: ['Angular', 'SQL Server', 'Azure'],
-    },
-    {
-      src: '/image/4.png',
-      title: 'Allocation Details',
-      context: 'Detailed allocation workspace for purchase orders, stock validation, lots and assignment review.',
-      contribution:
-        'Developed Angular features, integrated APIs, collaborated with Data Science teams and implemented reservation workflows.',
-      technologies: ['Angular 19', 'Module Federation', 'Docker', 'Kubernetes'],
-    },
-    {
-      src: '/image/5.png',
-      title: 'Reservation System',
-      context: 'Reservation workflow for clients, fridges, lots, sub-lots, SKUs and generated reservations.',
-      contribution:
-        'Developed Angular features, integrated APIs, collaborated with Data Science teams and implemented reservation workflows.',
-      technologies: ['Angular', 'Azure', 'Enterprise SSO'],
-    },
-  ];
-  const current = screenshots[index];
+  const current = autoAllocationScreenshots[index];
 
-  const next = () => setIndex((value) => (value + 1) % screenshots.length);
-  const prev = () => setIndex((value) => (value - 1 + screenshots.length) % screenshots.length);
+  const next = () => setIndex((value) => (value + 1) % autoAllocationScreenshots.length);
+  const prev = () => setIndex((value) => (value - 1 + autoAllocationScreenshots.length) % autoAllocationScreenshots.length);
   const image = (
     <img
       src={current.src}
@@ -695,7 +653,7 @@ function AutoGallery() {
           {image}
         </div>
         <div className="mt-2 flex gap-2 overflow-x-auto">
-          {screenshots.map((shot, shotIndex) => (
+          {autoAllocationScreenshots.map((shot, shotIndex) => (
             <button
               key={shot.title}
               type="button"
