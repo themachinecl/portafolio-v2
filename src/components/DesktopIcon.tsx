@@ -1,4 +1,5 @@
 import type { PortfolioApp } from '@/data/portfolio';
+import type { CSSProperties } from 'react';
 
 type DesktopIconProps = {
   app: PortfolioApp;
@@ -10,6 +11,7 @@ type DesktopIconProps = {
 export default function DesktopIcon({ app, onOpen, compact = false, dense = false }: DesktopIconProps) {
   const Icon = app.icon;
   const isAoe = app.id === 'portfolioAoe2';
+  const useClassicDesktopIcon = !compact && !isAoe;
 
   return (
     <button
@@ -27,11 +29,14 @@ export default function DesktopIcon({ app, onOpen, compact = false, dense = fals
     >
       <span
         className={[
-          'relative flex shrink-0 items-center justify-center rounded border border-white/50 shadow-panel',
+          'relative flex shrink-0 items-center justify-center',
+          useClassicDesktopIcon ? '' : 'rounded border border-white/50 shadow-panel',
           compact ? 'h-11 w-11' : dense ? 'h-9 w-9' : 'h-11 w-11',
         ].join(' ')}
         style={{
-          background: isAoe
+          background: useClassicDesktopIcon
+            ? 'transparent'
+            : isAoe
             ? 'linear-gradient(135deg, #5b3517, #d4a24c 58%, #fff0b8)'
             : `linear-gradient(135deg, ${app.accent}, #fff7c8)`,
           color: isAoe ? '#fff7d6' : '#172554',
@@ -39,6 +44,8 @@ export default function DesktopIcon({ app, onOpen, compact = false, dense = fals
       >
         {isAoe ? (
           <img src="/image/aoe2.png" alt="" className="h-full w-full rounded object-cover" aria-hidden="true" />
+        ) : useClassicDesktopIcon ? (
+          <ClassicDesktopIcon app={app} />
         ) : (
           <Icon size={compact ? 23 : dense ? 19 : 25} strokeWidth={2.2} />
         )}
@@ -47,5 +54,38 @@ export default function DesktopIcon({ app, onOpen, compact = false, dense = fals
         {app.title}
       </span>
     </button>
+  );
+}
+
+function ClassicDesktopIcon({ app }: { app: PortfolioApp }) {
+  const Icon = app.icon;
+  const variantById: Partial<Record<PortfolioApp['id'], string>> = {
+    cv: 'doc',
+    projects: 'folder',
+    experience: 'briefcase',
+    skills: 'control',
+    autoAllocation: 'network',
+    education: 'document',
+    languages: 'globe',
+    github: 'console',
+    linkedin: 'internet',
+    contact: 'mail',
+    recycleBin: 'recycle',
+    aboutSystem: 'computer',
+  };
+  const variant = variantById[app.id] ?? 'file';
+
+  return (
+    <span className={`desktop-ico desktop-ico-${variant}`} style={{ '--ico-accent': app.accent } as CSSProperties}>
+      <span className="ico-shadow" />
+      <span className="ico-base" />
+      <span className="ico-fold" />
+      <span className="ico-detail ico-detail-a" />
+      <span className="ico-detail ico-detail-b" />
+      <span className="ico-detail ico-detail-c" />
+      <span className="ico-lucide">
+        <Icon size={15} strokeWidth={2.5} />
+      </span>
+    </span>
   );
 }

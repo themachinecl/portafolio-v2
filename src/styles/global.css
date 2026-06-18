@@ -214,6 +214,293 @@ a {
   box-shadow: 0 16px 50px rgba(15, 23, 42, .25);
 }
 
+.desktop-ico {
+  position: relative;
+  display: block;
+  width: 38px;
+  height: 38px;
+  image-rendering: pixelated;
+}
+
+.ico-shadow,
+.ico-base,
+.ico-fold,
+.ico-detail,
+.ico-lucide {
+  position: absolute;
+}
+
+.ico-shadow {
+  left: 6px;
+  top: 7px;
+  width: 26px;
+  height: 25px;
+  background: rgba(0, 0, 0, .22);
+}
+
+.ico-base {
+  left: 4px;
+  top: 4px;
+  width: 28px;
+  height: 27px;
+  border: 1px solid #8994a5;
+  background:
+    linear-gradient(135deg, transparent 0 78%, #dce2ea 79%),
+    linear-gradient(#ffffff, #eef2f7);
+  box-shadow:
+    inset 1px 1px 0 #ffffff,
+    inset -1px -1px 0 #b5bfcc;
+}
+
+.ico-fold {
+  right: 6px;
+  top: 4px;
+  width: 8px;
+  height: 8px;
+  border-left: 1px solid #9aa5b3;
+  border-bottom: 1px solid #9aa5b3;
+  background: #eef2f7;
+}
+
+.ico-detail {
+  background: var(--ico-accent);
+  box-shadow: 1px 1px 0 rgba(0, 0, 0, .18);
+}
+
+.ico-detail-a {
+  left: 8px;
+  top: 10px;
+  width: 7px;
+  height: 7px;
+}
+
+.ico-detail-b {
+  left: 16px;
+  top: 10px;
+  width: 7px;
+  height: 7px;
+  background: #0b55bd;
+}
+
+.ico-detail-c {
+  left: 8px;
+  top: 18px;
+  width: 15px;
+  height: 5px;
+  background: #f2c94c;
+}
+
+.ico-lucide {
+  right: 5px;
+  bottom: 5px;
+  color: #122a67;
+  filter: drop-shadow(1px 1px 0 #ffffff);
+}
+
+.desktop-ico-folder .ico-shadow,
+.desktop-ico-folder .ico-base,
+.desktop-ico-recycle .ico-shadow,
+.desktop-ico-recycle .ico-base,
+.desktop-ico-briefcase .ico-shadow,
+.desktop-ico-briefcase .ico-base {
+  border-radius: 2px;
+}
+
+.desktop-ico-folder .ico-base {
+  top: 11px;
+  height: 19px;
+  border-color: #b78d2c;
+  background: linear-gradient(#ffe07a, #f0b83f);
+}
+
+.desktop-ico-folder .ico-base::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: -6px;
+  width: 13px;
+  height: 7px;
+  border: 1px solid #b78d2c;
+  border-bottom: 0;
+  border-radius: 2px 2px 0 0;
+  background: #ffd25a;
+}
+
+.desktop-ico-folder .ico-fold,
+.desktop-ico-folder .ico-detail {
+  display: none;
+}
+
+.desktop-ico-briefcase .ico-base {
+  top: 10px;
+  height: 21px;
+  border-color: #6b6426;
+  background: linear-gradient(#b7b74b, #7d812e);
+}
+
+.desktop-ico-briefcase .ico-base::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: -5px;
+  width: 10px;
+  height: 6px;
+  border: 1px solid #6b6426;
+  border-bottom: 0;
+  background: #b7b74b;
+}
+
+.desktop-ico-briefcase .ico-fold,
+.desktop-ico-briefcase .ico-detail {
+  display: none;
+}
+
+.desktop-ico-computer .ico-base {
+  left: 6px;
+  top: 5px;
+  width: 25px;
+  height: 20px;
+  border-color: #5f6a7d;
+  background: linear-gradient(#f7f8fb, #b9c3d2);
+}
+
+.desktop-ico-computer .ico-base::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  background: linear-gradient(135deg, #7fd0ff, #143c9f);
+}
+
+.desktop-ico-computer .ico-base::after {
+  content: '';
+  position: absolute;
+  left: 7px;
+  bottom: -8px;
+  width: 10px;
+  height: 7px;
+  background: #9aa5b3;
+  box-shadow: 0 6px 0 2px #6f7b8d;
+}
+
+.desktop-ico-computer .ico-fold,
+.desktop-ico-computer .ico-detail,
+.desktop-ico-computer .ico-lucide {
+  display: none;
+}
+
+.desktop-ico-network .ico-base,
+.desktop-ico-internet .ico-base,
+.desktop-ico-globe .ico-base {
+  left: 7px;
+  top: 6px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border-color: #2a6b74;
+  background:
+    linear-gradient(90deg, transparent 45%, rgba(255,255,255,.7) 46% 54%, transparent 55%),
+    linear-gradient(#76e0ff, #1e73c8 55%, #36a34c);
+}
+
+.desktop-ico-network .ico-fold,
+.desktop-ico-internet .ico-fold,
+.desktop-ico-globe .ico-fold,
+.desktop-ico-network .ico-detail,
+.desktop-ico-internet .ico-detail,
+.desktop-ico-globe .ico-detail {
+  display: none;
+}
+
+.desktop-ico-console .ico-base {
+  border-color: #454545;
+  background: #101010;
+}
+
+.desktop-ico-console .ico-detail-a {
+  left: 8px;
+  top: 10px;
+  width: 4px;
+  height: 4px;
+  background: #ff2b2b;
+  box-shadow:
+    5px 0 0 #224dff,
+    10px 0 0 #32c95d,
+    15px 0 0 #ffd23f,
+    0 6px 0 #ffffff,
+    5px 6px 0 #ffffff,
+    10px 6px 0 #ffffff;
+}
+
+.desktop-ico-console .ico-detail-b,
+.desktop-ico-console .ico-detail-c,
+.desktop-ico-console .ico-fold,
+.desktop-ico-console .ico-lucide {
+  display: none;
+}
+
+.desktop-ico-mail .ico-base {
+  border-color: #7e8a99;
+  background: #ffffff;
+}
+
+.desktop-ico-mail .ico-base::before {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: 7px;
+  width: 20px;
+  height: 13px;
+  border: 1px solid #778399;
+  background:
+    linear-gradient(135deg, transparent 48%, #87a6d9 49% 52%, transparent 53%),
+    linear-gradient(45deg, transparent 48%, #87a6d9 49% 52%, transparent 53%),
+    #eef4ff;
+}
+
+.desktop-ico-mail .ico-fold,
+.desktop-ico-mail .ico-detail,
+.desktop-ico-mail .ico-lucide {
+  display: none;
+}
+
+.desktop-ico-control .ico-detail-a {
+  width: 5px;
+  height: 16px;
+  background: #f04b3d;
+  box-shadow:
+    7px 0 0 #2978e8,
+    14px 0 0 #33a852;
+}
+
+.desktop-ico-recycle .ico-base {
+  left: 8px;
+  top: 6px;
+  width: 22px;
+  height: 26px;
+  border-color: #6f7b8d;
+  background:
+    linear-gradient(90deg, rgba(20,85,180,.15) 1px, transparent 1px),
+    linear-gradient(#e9f7ff, #9dd5e8);
+  background-size: 5px 5px, auto;
+}
+
+.desktop-ico-recycle .ico-base::before {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: -4px;
+  width: 14px;
+  height: 4px;
+  background: #d8eef7;
+  border: 1px solid #6f7b8d;
+}
+
+.desktop-ico-recycle .ico-fold,
+.desktop-ico-recycle .ico-detail,
+.desktop-ico-recycle .ico-lucide {
+  display: none;
+}
+
 @keyframes menu-pop {
   from {
     opacity: 0;
